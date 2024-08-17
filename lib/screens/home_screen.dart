@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/detailed_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -7,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
+    String name = "Andrew Garfield";
     return Scaffold(
       backgroundColor: const Color(0XFFE4EAFF),
       // make an entire screen scrollable
@@ -28,27 +29,52 @@ class HomeScreen extends StatelessWidget {
                   height: 235,
                 ),
                 // Positioned is only used in stack
-                const Positioned(
+                Positioned(
                   bottom: 0,
                   child: Padding(
-                    padding: EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "This is some sample text",
-                          style: TextStyle(
+                          name,
+                          style: const TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
-                        Text(
+                        const Text(
                           "This is some sample text",
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.normal,
                             color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        // Use Gesture Detector to make
+                        // any widget tapable.
+                        GestureDetector(
+                          onTap: () {
+                            // Material pushes the "NEW SCREEN"
+                            // with in the stack
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailedScreen(name: name),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            color: Colors.blue,
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text("Next Screen"),
+                            ),
                           ),
                         )
                       ],
