@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // Put the variable outside the class to make it
+  // global and accessable for set State
+  bool isTapped = false;
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     String name = "Andrew Garfield";
+
     return Scaffold(
       backgroundColor: const Color(0XFFE4EAFF),
       // make an entire screen scrollable
@@ -22,26 +32,48 @@ class HomeScreen extends StatelessWidget {
             // put widgets on top of each other
             Stack(
               children: [
-                Image.asset(
-                  'assets/images/background.png',
-                  fit: BoxFit.fitWidth,
-                  width: width,
-                  height: 235,
+                GestureDetector(
+                  onTap: () {
+                    // Call set State to update the state of the image
+                    setState(() {
+                      isTapped = !isTapped;
+                    });
+                  },
+                  // For animation purposes, we are going to use
+                  // AnimatedContainer
+                  child: AnimatedContainer(
+                    // Ternary Operator for check the state of a widget
+                    height: isTapped ? height / 2 : 235,
+                    duration: const Duration(seconds: 3),
+                    child: Image.asset(
+                      'assets/images/background.png',
+                      fit: BoxFit.cover,
+                      width: width,
+                    ),
+                  ),
                 ),
                 // Positioned is only used in stack
-                Positioned(
+                //
+                AnimatedPositioned(
+                  duration: const Duration(seconds: 3),
+                  right: isTapped ? 0 : width - 250,
                   bottom: 0,
                   child: Padding(
                     padding: const EdgeInsets.all(24),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: isTapped
+                          ? CrossAxisAlignment.end
+                          : CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          name,
-                          style: const TextStyle(
-                            fontSize: 28,
+                        AnimatedDefaultTextStyle(
+                          duration: const Duration(seconds: 3),
+                          style: TextStyle(
+                            fontSize: isTapped ? 42 : 28,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: isTapped ? Colors.amber : Colors.white,
+                          ),
+                          child: Text(
+                            name,
                           ),
                         ),
                         const Text(
@@ -147,7 +179,6 @@ class HomeScreen extends StatelessWidget {
   }
 
   // create a local widget
-  // {namedParameter}
   Widget card({title, description}) {
     return Container(
       width: double.infinity,
