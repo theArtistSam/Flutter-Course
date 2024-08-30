@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,10 +22,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0XFFE4EAFF),
-      // make an entire screen scrollable
+      // App bar is a sticky header on a screen
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Home Screen"),
+        leading: GestureDetector(
+          onTap: () {
+            print("Clicked on the Edit");
+          },
+          child: const Center(
+            child: Text(
+              "Edit",
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: GestureDetector(
+              onTap: () {
+                print("Clicked on Edit Icon");
+              },
+              child: SvgPicture.asset(
+                'assets/icons/edit.svg',
+                color: Colors.blue,
+              ),
+            ),
+          )
+        ],
+      ), // make an entire screen scrollable
       body: SingleChildScrollView(
         // the behavior of the scroll mechanism
-        physics: const NeverScrollableScrollPhysics(),
+        // physics: const NeverScrollableScrollPhysics(),
         child: Column(
           // CrossAxisAlignment: from top to bottom
           // MainAxisAlignment: from left to right
@@ -115,9 +145,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
+            // Textfield in flutter
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Container(
+                color: Colors.white,
+                child: TextField(
+                  // minLines: 1,
+                  // maxLines: 5,
+                  // autofocus: false,
+                  decoration: const InputDecoration(
+                      icon: Icon(Icons.search),
+                      border: InputBorder.none,
+                      hintText: "Search something...",
+                      contentPadding: EdgeInsets.all(10)
+                      // hintStyle: Text
+                      ),
+                  // style: GoogleFonts.poppins(
+                  //   fontSize: 16,
+                  //   fontWeight: FontWeight.w500,
+                  //   // COLOR: FIX
+                  //   color: NexusColors.isDark
+                  //       ? Colors.white
+                  //       : NexusColors.primaryColorLight,
+                  // ),
+                  onChanged: (value) {},
+                ),
+              ),
+            ),
             // ListView is scrollable
             // Use this to make a seciton on the screen
             // scrollable
+
             SizedBox(
               height: height - 235,
               // child: ListView(
@@ -158,7 +217,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView.separated(
                 padding: const EdgeInsets.all(24),
                 // For apple devices bouncy scrolling animation
-                physics: const BouncingScrollPhysics(),
+                // physics: const BouncingScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
                 itemCount: 5,
                 separatorBuilder: (context, index) {
                   return const SizedBox(height: 15);
