@@ -22,6 +22,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0XFFE4EAFF),
+      floatingActionButton: FloatingActionButton(
+          child: SvgPicture.asset(
+            'assets/icons/edit.svg',
+            color: Colors.black,
+          ),
+          onPressed: () {
+            const snackBar = SnackBar(
+              duration: Duration(seconds: 5),
+              content: Text('Yay! A SnackBar!'),
+            );
+
+            // Find the ScaffoldMessenger in the widget tree
+            // and use it to show a SnackBar.
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }),
       // App bar is a sticky header on a screen
       appBar: AppBar(
         centerTitle: true,
