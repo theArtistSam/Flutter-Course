@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/about_screen.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
 import 'package:flutter_app/screens/home_screen.dart';
+import 'package:flutter_app/screens/map_screen.dart';
+import 'package:flutter_app/screens/profile_screen.dart';
+import 'package:flutter_app/screens/sample_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomNavbar extends StatefulWidget {
@@ -19,9 +23,11 @@ class _BottomNavbarState extends State<BottomNavbar> {
     });
   }
 
-  static const List<Widget> screens = [
-    HomeScreen(),
-    DetailedScreen(name: "Some Name")
+  static List<Widget> screens = [
+    const HomeScreen(),
+    const MapScreen(),
+    const ProfileScreen(),
+    AboutScreen(),
   ];
 
   @override
@@ -33,26 +39,24 @@ class _BottomNavbarState extends State<BottomNavbar> {
           onTap: onItemTap,
           currentIndex: selectedIndex,
           selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
-          items: [
+          unselectedItemColor: Colors.black45,
+          items: const [
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/chat-filled.svg',
-                color: selectedIndex == 0 ? Colors.blue : Colors.grey,
-              ),
+              icon: Icon(Icons.home),
               label: "Home",
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/person-filled.svg',
-                color: selectedIndex == 1 ? Colors.blue : Colors.grey,
-              ),
-              label: "Friends",
+              icon: Icon(Icons.map),
+              label: "Map",
             ),
-            // BottomNavigationBarItem(
-            //   icon: SvgPicture.asset('assets/icons/settings-filled.svg'),
-            //   label: "Settings",
-            // ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: "Profile",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.info),
+              label: "About",
+            ),
           ]),
     );
   }
