@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/utils/enums.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -12,13 +13,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // List of items for the dropdown
 
-  final List<String> _items = ['None', 'Folder 1', 'Folder 2', 'Folder 3'];
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   // Selected value
-  String? _selectedValue;
+  MenuItems? _selectedValue;
 
   final box = Hive.box('dataBox');
+
+  void emptyBox() {
+    box.deleteFromDisk();
+  }
 
   void addData({
     required String name,
@@ -30,6 +34,16 @@ class _HomeScreenState extends State<HomeScreen> {
       'location': location,
       'category': category,
     });
+  }
+
+  void add100SampleItems() {
+    for (int i = 1; i <= 1000; i++) {
+      addData(
+        name: 'Test $i',
+        location: 'Test Location $i',
+        category: 'Test Category $i',
+      );
+    }
   }
 
   @override
@@ -69,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const Center(child: Text('No Data Available'));
                 } else {
                   return ListView.builder(
-                    reverse: true,
+                    // reverse: true,
                     itemCount: box.length,
                     itemBuilder: (context, index) {
                       final data = box.getAt(index) as Map;
@@ -122,22 +136,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                   onChanged: (value) {},
                 ),
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField<MenuItems>(
                   decoration: const InputDecoration(
-                    labelText: 'Select Folder',
+                    labelText: 'Select Item',
                     border: OutlineInputBorder(),
                   ),
                   value: _selectedValue,
                   icon: const Icon(Icons.arrow_drop_down),
-                  items: _items.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
+                  items: [
+                    for (int i = 0; i < MenuItems.values.length; i++)
+                      DropdownMenuItem<MenuItems>(
+                        value: MenuItems.values[i],
+                        child:
+                            Text(MenuItems.values[i].toString().split(".")[1]),
+                      )
+                  ],
+                  onChanged: (MenuItems? newValue) {
                     setState(() {
-                      _selectedValue = newValue == 'None' ? null : newValue;
+                      if (newValue == MenuItems.none) {
+                        _selectedValue = null;
+                      } else {
+                        _selectedValue = newValue;
+                      }
                     });
                   },
                 ),
@@ -146,20 +166,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       // Add the data to hive
                       String name = _nameController.text;
                       String location = _locationController.text;
-                      String category = _selectedValue!;
+                      MenuItems? category = _selectedValue;
                       if (name.isNotEmpty &&
                           location.isNotEmpty &&
-                          category.isNotEmpty) {
+                          category != null) {
                         addData(
-                            name: name, location: location, category: category);
+                          name: name,
+                          location: location,
+                          category: category.toString().split(".")[1],
+                        );
+                        _nameController.clear();
+                        _locationController.clear();
+                        _selectedValue = MenuItems.none;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Data added successfully!')),
+                        );
                       }
-                      _nameController.clear();
-                      _locationController.clear();
-                      _selectedValue = 'None';
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Data added successfully!')),
-                      );
                       Navigator.pop(context);
                     },
                     child: const Text("Add Data")),
