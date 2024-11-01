@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void add100SampleItems() {
+  void add1000SampleItems() {
     for (int i = 1; i <= 1000; i++) {
       addData(
         name: 'Test $i',
@@ -48,7 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    if (box.isEmpty) {
+      add1000SampleItems();
+    }
     super.initState();
   }
 
