@@ -184,8 +184,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SnackBar(
                               content: Text('Data added successfully!')),
                         );
+                        Navigator.pop(context);
+                      } else {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text('One of the fields is empty!')),
+                        );
                       }
-                      Navigator.pop(context);
                     },
                     child: const Text("Add Data")),
               ],
